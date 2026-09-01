@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Foto do Evento</title>
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Sinária & Edmário</title>
 
     <link rel="stylesheet" href="estilos/style.css">
 </head>
@@ -13,20 +18,36 @@
 
     <main class="camera-container">
 
+        <!-- CÂMERA -->
         <video id="camera" autoplay playsinline></video>
 
+        <!-- MOLDURA -->
+        <img id="moldura"
+             src="imagem/moldura.png"
+             alt="Moldura">
+
+        <!-- INFORMAÇÕES -->
         <div class="mensagem">
-            <h1>Sinária & Edmário</h1>
-            <p>19 de setembro de 2026</p>
+           
         </div>
 
+        <!-- BOTÃO ABRIR CÂMERA -->
         <button id="abrirCamera">
             📸 Abrir câmera
         </button>
+
+        <!-- BOTÃO TIRAR FOTO -->
+        <button id="tirarFoto" class="oculto">
+            📸 Tirar foto
+        </button>
+
+        <!-- CANVAS INVISÍVEL -->
+        <canvas id="canvas"></canvas>
 
     </main>
 
     <script src="script/script.js"></script>
 
 </body>
+
 </html>
