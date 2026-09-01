@@ -16,8 +16,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* ÁREA PRINCIPAL */
-
 .camera-container {
     position: relative;
 
@@ -28,8 +26,6 @@ body {
 
     background: #000;
 }
-
-/* CÂMERA */
 
 #camera {
     position: absolute;
@@ -43,8 +39,6 @@ body {
 
     z-index: 1;
 }
-
-/* MOLDURA */
 
 #moldura {
     position: absolute;
@@ -61,8 +55,6 @@ body {
     z-index: 5;
 }
 
-/* TEXTO */
-
 .mensagem {
     position: absolute;
 
@@ -75,8 +67,7 @@ body {
 
     color: white;
 
-    text-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
 
     z-index: 10;
 }
@@ -87,11 +78,8 @@ body {
 
 .mensagem p {
     margin-top: 5px;
-
     font-size: 16px;
 }
-
-/* BOTÃO */
 
 button {
     position: absolute;
@@ -126,21 +114,10 @@ button {
 
     z-index: 20;
 }
-/* BOTÃO TIRAR FOTO */
-
-#tirarFoto {
-    bottom: calc(
-        30px + env(safe-area-inset-bottom)
-    );
-}
-
-/* ESCONDER ELEMENTOS */
 
 .oculto {
     display: none;
 }
-
-/* CANVAS */
 
 #canvas {
     display: none;
