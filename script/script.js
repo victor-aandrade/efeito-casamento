@@ -1,189 +1,329 @@
 const camera = document.getElementById("camera");
+
 const moldura = document.getElementById("moldura");
 
-const abrirCamera = document.getElementById("abrirCamera");
-const tirarFoto = document.getElementById("tirarFoto");
+const abrirCamera =
+    document.getElementById("abrirCamera");
 
-const canvas = document.getElementById("canvas");
+const tirarFoto =
+    document.getElementById("tirarFoto");
 
-let stream;
+const trocarCamera =
+    document.getElementById("trocarCamera");
+
+const canvas =
+    document.getElementById("canvas");
 
 
-// ===============================
-// ABRIR CÂMERA
-// ===============================
+let stream = null;
 
-abrirCamera.addEventListener("click", async () => {
+
+// ====================================
+// CÂMERA ATUAL
+// ====================================
+
+let cameraAtual = "user";
+
+
+// ====================================
+// INICIAR CÂMERA
+// ====================================
+
+async function iniciarCamera() {
 
     try {
 
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "user"
-            },
-            audio: false
-        });
+        // Se já existe uma câmera aberta,
+        // vamos desligá-la.
+
+        if (stream) {
+
+            stream.getTracks().forEach(
+                track => track.stop()
+            );
+
+        }
+
+
+        stream =
+            await navigator.mediaDevices
+            .getUserMedia({
+
+                video: {
+
+                    facingMode:
+                        cameraAtual
+
+                },
+
+                audio: false
+
+            });
+
 
         camera.srcObject = stream;
 
+
         await camera.play();
 
-        abrirCamera.classList.add("oculto");
-
-        tirarFoto.classList.remove("oculto");
 
     } catch (erro) {
 
         console.error(erro);
 
         alert(
-            "Não foi possível acessar a câmera.\n\n" +
-            erro.message
+            "Não foi possível acessar a câmera."
         );
 
     }
 
-});
+}
 
 
-// ===============================
-// TIRAR FOTO
-// ===============================
+// ====================================
+// BOTÃO ABRIR CÂMERA
+// ====================================
 
-tirarFoto.addEventListener("click", () => {
+abrirCamera.addEventListener(
+    "click",
+    async () => {
 
-    if (!camera.videoWidth) {
-        alert("A câmera ainda não está pronta.");
-        return;
+        await iniciarCamera();
+
+
+        abrirCamera.classList.add(
+            "oculto"
+        );
+
+
+        tirarFoto.classList.remove(
+            "oculto"
+        );
+
     }
-
-    const larguraTela = window.innerWidth;
-    const alturaTela = window.innerHeight;
-
-    const larguraCamera = camera.videoWidth;
-    const alturaCamera = camera.videoHeight;
+);
 
 
-    // =====================================
-    // CALCULAR ENQUADRAMENTO OBJECT-COVER
-    // =====================================
+// ====================================
+// TROCAR CÂMERA
+// ====================================
 
-    const escala = Math.max(
-        larguraTela / larguraCamera,
-        alturaTela / alturaCamera
-    );
+trocarCamera.addEventListener(
+    "click",
+    async () => {
 
-    const larguraExibida = larguraCamera * escala;
-    const alturaExibida = alturaCamera * escala;
+        if (!stream) {
 
-    const corteX =
-        (larguraExibida - larguraTela) / 2;
+            await iniciarCamera();
 
-    const corteY =
-        (alturaExibida - alturaTela) / 2;
+            return;
+
+        }
 
 
-    // =====================================
-    // TAMANHO DA FOTO FINAL
-    // =====================================
+        if (cameraAtual === "user") {
 
-    canvas.width = 1080;
-    canvas.height = 1920;
+            cameraAtual = "environment";
 
-    const ctx = canvas.getContext("2d");
+        } else {
 
+            cameraAtual = "user";
 
-    // =====================================
-    // DESENHAR CÂMERA
-    // =====================================
-
-    const escalaFinal = Math.max(
-        canvas.width / larguraCamera,
-        canvas.height / alturaCamera
-    );
-
-    const larguraFinal =
-        larguraCamera * escalaFinal;
-
-    const alturaFinal =
-        alturaCamera * escalaFinal;
-
-    const corteFinalX =
-        (larguraFinal - canvas.width) / 2;
-
-    const corteFinalY =
-        (alturaFinal - canvas.height) / 2;
+        }
 
 
-    ctx.drawImage(
-        camera,
+        await iniciarCamera();
 
-        -corteFinalX,
-        -corteFinalY,
-
-        larguraFinal,
-        alturaFinal
-    );
+    }
+);
 
 
-    // =====================================
-    // DESENHAR MOLDURA
-    // =====================================
+// ====================================
+// TIRAR FOTO
+// ====================================
 
-    ctx.drawImage(
-        moldura,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+tirarFoto.addEventListener(
+    "click",
+    () => {
 
+        if (!camera.videoWidth) {
 
-    // =====================================
-    // GERAR FOTO
-    // =====================================
+            alert(
+                "A câmera ainda não está pronta."
+            );
 
-    const foto = canvas.toDataURL(
-        "image/png"
-    );
+            return;
+
+        }
 
 
-    mostrarResultado(foto);
+        canvas.width = 1080;
 
-});
+        canvas.height = 1920;
 
 
-// =====================================
-// MOSTRAR RESULTADO
-// =====================================
+        const ctx =
+            canvas.getContext("2d");
 
+
+        const larguraCamera =
+            camera.videoWidth;
+
+        const alturaCamera =
+            camera.videoHeight;
+
+
+        // ==============================
+        // ENQUADRAMENTO
+        // ==============================
+
+        const escala =
+            Math.max(
+
+                canvas.width /
+                    larguraCamera,
+
+                canvas.height /
+                    alturaCamera
+
+            );
+
+
+        const larguraFinal =
+            larguraCamera * escala;
+
+
+        const alturaFinal =
+            alturaCamera * escala;
+
+
+        const x =
+            (canvas.width -
+             larguraFinal) / 2;
+
+
+        const y =
+            (canvas.height -
+             alturaFinal) / 2;
+
+
+        // ==============================
+        // ESPELHAR CÂMERA FRONTAL
+        // ==============================
+
+        if (
+            cameraAtual === "user"
+        ) {
+
+            ctx.save();
+
+            ctx.translate(
+                canvas.width,
+                0
+            );
+
+            ctx.scale(-1, 1);
+
+        }
+
+
+        // ==============================
+        // FOTO
+        // ==============================
+
+        ctx.drawImage(
+
+            camera,
+
+            x,
+            y,
+
+            larguraFinal,
+            alturaFinal
+
+        );
+
+
+        if (
+            cameraAtual === "user"
+        ) {
+
+            ctx.restore();
+
+        }
+
+
+        // ==============================
+        // MOLDURA
+        // ==============================
+
+        ctx.drawImage(
+
+            moldura,
+
+            0,
+            0,
+
+            canvas.width,
+            canvas.height
+
+        );
+
+
+        // ==============================
+        // GERAR FOTO
+        // ==============================
+
+        const foto =
+            canvas.toDataURL(
+                "image/png"
+            );
+
+
+        mostrarResultado(foto);
+
+    }
+);
 function mostrarResultado(foto) {
 
-    const tela = document.createElement("div");
+    const tela =
+        document.createElement("div");
+
 
     tela.style.position = "fixed";
+
     tela.style.inset = "0";
+
     tela.style.background = "#000";
+
     tela.style.zIndex = "100";
+
+    tela.style.overflowY = "auto";
+
 
     tela.innerHTML = `
 
         <div style="
-            width:100%;
-            height:100%;
+            min-height:100%;
+            box-sizing:border-box;
             display:flex;
             flex-direction:column;
             align-items:center;
-            justify-content:center;
-            gap:15px;
-            padding:20px;
+            justify-content:flex-start;
+            gap:12px;
+            padding:20px 20px
+            calc(
+                30px +
+                env(safe-area-inset-bottom)
+            );
         ">
 
             <img
                 src="${foto}"
                 style="
+                    width:auto;
                     max-width:100%;
-                    max-height:75vh;
+                    max-height:65vh;
                     object-fit:contain;
                 "
             >
@@ -222,100 +362,120 @@ function mostrarResultado(foto) {
 
     `;
 
+
     document.body.appendChild(tela);
 
 
-    // =====================================
+    // ===============================
     // SALVAR
-    // =====================================
+    // ===============================
 
     document
         .getElementById("salvarFoto")
-        .addEventListener("click", () => {
+        .addEventListener(
+            "click",
+            () => {
 
-            const link =
-                document.createElement("a");
+                const link =
+                    document.createElement("a");
 
-            link.href = foto;
+                link.href = foto;
 
-            link.download =
-                "foto-sinaria-edmario.png";
+                link.download =
+                    "foto-sinaria-edmario.png";
 
-            link.click();
+                link.click();
 
-        });
+            }
+        );
 
 
-    // =====================================
+    // ===============================
     // COMPARTILHAR
-    // =====================================
+    // ===============================
 
     document
         .getElementById("compartilharFoto")
-        .addEventListener("click", async () => {
+        .addEventListener(
+            "click",
+            async () => {
 
-            try {
+                try {
 
-                const resposta =
-                    await fetch(foto);
+                    const resposta =
+                        await fetch(foto);
 
-                const blob =
-                    await resposta.blob();
+                    const blob =
+                        await resposta.blob();
 
-                const arquivo =
-                    new File(
-                        [blob],
-                        "foto-sinaria-edmario.png",
-                        {
-                            type: "image/png"
-                        }
-                    );
 
-                if (
-                    navigator.share &&
-                    navigator.canShare &&
-                    navigator.canShare({
-                        files: [arquivo]
-                    })
-                ) {
+                    const arquivo =
+                        new File(
 
-                    await navigator.share({
-                        title:
-                            "Foto do casamento",
+                            [blob],
 
-                        text:
-                            "Sinária & Edmário",
+                            "foto-sinaria-edmario.png",
 
-                        files: [arquivo]
-                    });
+                            {
+                                type:
+                                    "image/png"
+                            }
 
-                } else {
+                        );
 
-                    alert(
-                        "O compartilhamento de arquivos não está disponível neste navegador."
-                    );
+
+                    if (
+                        navigator.share &&
+                        navigator.canShare &&
+                        navigator.canShare({
+                            files: [arquivo]
+                        })
+                    ) {
+
+                        await navigator.share({
+
+                            title:
+                                "Foto do casamento",
+
+                            text:
+                                "Sinária & Edmário",
+
+                            files:
+                                [arquivo]
+
+                        });
+
+                    } else {
+
+                        alert(
+                            "O compartilhamento de arquivos não está disponível neste navegador."
+                        );
+
+                    }
+
+                } catch (erro) {
+
+                    console.error(erro);
 
                 }
 
-            } catch (erro) {
-
-                console.error(erro);
-
             }
+        );
 
-        });
 
-
-    // =====================================
+    // ===============================
     // TIRAR OUTRA FOTO
-    // =====================================
+    // ===============================
 
     document
         .getElementById("voltarCamera")
-        .addEventListener("click", () => {
+        .addEventListener(
+            "click",
+            () => {
 
-            tela.remove();
+                tela.remove();
 
-        });
+            }
+        );
 
 }

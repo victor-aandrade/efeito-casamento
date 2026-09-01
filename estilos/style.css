@@ -16,7 +16,13 @@ body {
     font-family: Arial, sans-serif;
 }
 
+
+/* =========================
+   ÁREA DA CÂMERA
+========================= */
+
 .camera-container {
+
     position: relative;
 
     width: 100%;
@@ -27,7 +33,13 @@ body {
     background: #000;
 }
 
+
+/* =========================
+   CÂMERA
+========================= */
+
 #camera {
+
     position: absolute;
 
     inset: 0;
@@ -40,7 +52,13 @@ body {
     z-index: 1;
 }
 
+
+/* =========================
+   MOLDURA
+========================= */
+
 #moldura {
+
     position: absolute;
 
     inset: 0;
@@ -55,10 +73,17 @@ body {
     z-index: 5;
 }
 
+
+/* =========================
+   TEXTO
+========================= */
+
 .mensagem {
+
     position: absolute;
 
     top: 30px;
+
     left: 0;
 
     width: 100%;
@@ -67,58 +92,132 @@ body {
 
     color: white;
 
-    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+    text-shadow:
+        0 2px 5px rgba(0,0,0,0.8);
 
     z-index: 10;
+
 }
 
 .mensagem h1 {
+
     font-size: 28px;
+
 }
 
 .mensagem p {
+
     margin-top: 5px;
+
     font-size: 16px;
+
 }
 
-button {
+
+/* =========================
+   CONTROLES
+========================= */
+
+.controles {
+
     position: absolute;
 
-    bottom: calc(
-        30px + env(safe-area-inset-bottom)
-    );
+    bottom:
+        calc(
+            25px +
+            env(safe-area-inset-bottom)
+        );
 
-    left: 50%;
+    left: 0;
 
-    transform: translateX(-50%);
+    width: 100%;
 
-    min-height: 52px;
+    display: flex;
 
-    padding: 15px 30px;
+    justify-content: center;
 
-    border: none;
+    align-items: center;
 
-    border-radius: 30px;
+    gap: 25px;
 
-    background: white;
+    z-index: 20;
+
+}
+
+
+/* =========================
+   BOTÃO PRINCIPAL
+========================= */
+
+.botao-principal {
+
+    width: 75px;
+
+    height: 75px;
+
+    border-radius: 50%;
+
+    border: 5px solid white;
+
+    background: rgba(255,255,255,0.9);
 
     color: black;
 
-    font-size: 18px;
+    font-size: 28px;
 
-    font-weight: bold;
+    display: flex;
 
-    white-space: nowrap;
+    align-items: center;
+
+    justify-content: center;
 
     cursor: pointer;
 
-    z-index: 20;
 }
+
+
+/* =========================
+   BOTÃO SECUNDÁRIO
+========================= */
+
+.botao-secundario {
+
+    width: 55px;
+
+    height: 55px;
+
+    border-radius: 50%;
+
+    border: 2px solid white;
+
+    background: rgba(0,0,0,0.5);
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   ESCONDER
+========================= */
 
 .oculto {
+
     display: none;
+
 }
 
+
+/* =========================
+   CANVAS
+========================= */
+
 #canvas {
+
     display: none;
+
 }

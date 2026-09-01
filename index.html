@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -12,33 +13,79 @@
     <title>Sinária & Edmário</title>
 
     <link rel="stylesheet" href="estilos/style.css">
+
 </head>
 
 <body>
 
     <main class="camera-container">
 
-        <video id="camera" autoplay playsinline></video>
+        <!-- CÂMERA -->
+        <video
+            id="camera"
+            autoplay
+            playsinline>
+        </video>
 
-        <img id="moldura"
-             src="imagem/moldura.png"
-             alt="Moldura">
 
+        <!-- MOLDURA -->
+        <img
+            id="moldura"
+            src="imagem/moldura.png"
+            alt="Moldura do evento">
+
+
+        <!-- INFORMAÇÕES -->
         <div class="mensagem">
-           
+
         </div>
 
-        <button id="abrirCamera">
-            📸 Abrir câmera
-        </button>
 
-        <button id="tirarFoto" class="oculto">
-            📸 Tirar foto
-        </button>
+        <!-- CONTROLES -->
+
+        <div class="controles">
+
+            <!-- TROCAR CÂMERA -->
+
+            <button
+                id="trocarCamera"
+                class="botao-secundario">
+
+                🔄
+
+            </button>
+
+
+            <!-- ABRIR CÂMERA -->
+
+            <button
+                id="abrirCamera"
+                class="botao-principal">
+
+                📸
+
+            </button>
+
+
+            <!-- TIRAR FOTO -->
+
+            <button
+                id="tirarFoto"
+                class="botao-principal oculto">
+
+                📸
+
+            </button>
+
+        </div>
+
+
+        <!-- CANVAS -->
 
         <canvas id="canvas"></canvas>
 
     </main>
+
 
     <script src="script/script.js"></script>
 
