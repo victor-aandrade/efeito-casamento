@@ -50,7 +50,8 @@ body {
 
 button {
     position: absolute;
-    bottom: 40px;
+    bottom: calc(30px + env(safe-area-inset-bottom));
+
     left: 50%;
     transform: translateX(-50%);
 
@@ -68,4 +69,7 @@ button {
     cursor: pointer;
 
     z-index: 20;
+
+    min-height: 52px;
+    white-space: nowrap;
 }
